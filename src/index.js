@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const userRouter = require("./routers/userRouter");
@@ -12,6 +13,7 @@ const jsonParser = bodyParser.json();
 const urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.use(jsonParser);
 app.use(urlencodedParser);
+app.use(cors());
 
 app.use("/user", userRouter);
 app.use("/tasks", taskRouter);

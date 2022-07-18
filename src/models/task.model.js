@@ -1,11 +1,15 @@
 const mongoose = require("mongoose");
+const Joi = require("joi");
 const { Schema, model } = mongoose;
 
+const taskJoi = Joi.object({
+  title: Joi.string().trim().min(1).required(),
+  description: Joi.string().trim().min(1).required(),
+});
+
 const taskSchema = new Schema({
-  description: {
-    type: String,
-    required: true,
-  },
+  title: String,
+  description: String,
   completed: {
     type: Boolean,
     default: false,
@@ -14,8 +18,21 @@ const taskSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
+}, {
+  timestamps: true
 });
 
-const Task = model("Task", taskSchema);
+taskSchema.statics.validate = function (obj) {
+  const { error, value } = taskJoi.validate(obj, {
+    allowUnknown: true,
+    stripUnknown: true,
+  });
+  return { error, value };
+};
 
-module.exports = { Task, taskSchema };
+const Task = model("Task", taskSchema);
+module.exports = Task;

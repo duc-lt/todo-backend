@@ -1,6 +1,5 @@
 const Joi = require("joi");
 const mongoose = require("mongoose");
-const { taskSchema } = require("./task.model");
 
 const userJoi = Joi.object({
   username: Joi.string().min(3).required(),
@@ -15,9 +14,8 @@ const userSchema = new mongoose.Schema({
     unique: true,
   },
   password: String,
-  tasks: {
-    type: [taskSchema],
-  },
+}, {
+  timestamps: true
 });
 
 userSchema.statics.validate = function (obj) {

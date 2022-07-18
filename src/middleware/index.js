@@ -17,6 +17,9 @@ async function requireLogin(req, res, next) {
   if (token) {
     const user = await verifyToken(token);
     req.user = user;
+    // if (Object.keys(req.body).length > 0) {
+    //   req.body.user = req.user._id;
+    // }
     return next();
   }
   res.status(httpCode.FORBIDDEN).json({ msg: "khong co quyen" });
